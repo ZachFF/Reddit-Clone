@@ -1,0 +1,40 @@
+extends layout.pug
+
+block title
+    title Gray Reddit
+
+block content
+    div.post-wrapper
+        ul.post-list
+            li.post
+                h1 Welcome to Better Reddit
+    div.hotTopContainer
+        a(href="/sort/hot" class="hotTop") Hot 
+        a(href="/sort/top" class="hotTop") Top
+        
+        a(href='/createPost' class="hotTop" style="margin-left:485px") Create a post
+    
+    div.post-wrapper
+        ul.post-list
+            each post in posts
+                li.post
+                    h2
+                        if post.url
+                            a(href=post.url)= post.title
+                        else
+                            a(href="/post/"+post.id)= post.title
+                        p
+                            a(href="/post/"+post.id) Comments                       
+                        p Submitted by 
+                            a(href="/u/"+post.user.username)= post.user.username
+                            span  in 
+                            a(href="/r/"+post.subreddit.name) /r/#{post.subreddit.name}
+                        p Score: #{post.voteScore} Upvotes: #{post.numUpvotes} Downvotes: #{post.numDownvotes}
+                         form(action="/vote", method="POST") 
+                            input(type="hidden" name="postId" value=`${post.id}`)
+                            button(class="plus" type="submit" name="vote" value="1") 
+                            button(class="minus" type="submit" name="vote" value="-1") 
+        
+                        if post.isImage
+                         img(src=post.url, width='50', height='50')
+                         
